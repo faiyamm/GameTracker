@@ -20,7 +20,10 @@ struct ContentView: View {
                 NavigationLink(destination: GameDetailView(game: $game)) {
                     GameListItem(game: game)
                 }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
             }
+            .listStyle(.plain)
             .navigationTitle("Game Manager")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

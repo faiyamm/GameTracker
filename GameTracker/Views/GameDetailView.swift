@@ -13,55 +13,75 @@ struct GameDetailView: View {
     
     var body: some View {
         ScrollView {
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    Image(game.cover)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 150, height: 150)
-                        .padding(.vertical, 20)
-                    
-                    VStack(alignment: .leading) {
-                        Text(game.title)
-                            .font(.largeTitle)
-                            .bold()
-                        Text(game.developer)
-                            .font(Font.headline)
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 5)
-                        HStack(spacing: 10) {
-                            CustomCapsule(text: game.platform.rawValue, color: .blue)
-                            CustomCapsule(text: game.status.rawValue, color: .red)
-                        }
-                        Spacer()
-                    }
+            VStack(spacing: 25) {
+                Image(game.cover)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 300)
+                    .cornerRadius(20)
+                    .shadow(color: .black.opacity(0.3), radius: 15, x: 0, y: 10)
                     .padding(.top, 20)
-                }
-                Text(game.description)
-                
-                HStack(spacing: 10) {
-                    Text("Review")
-                        .font(.title2.bold())
-                        .padding(.vertical, 2)
+
+                VStack(spacing: 8) {
+                    Text(game.title)
+                        .font(.system(.title, design: .rounded))
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
                     
-                    HStack(spacing: 2) {
-                        ForEach(0..<5, id: \.self) { star in
-                            Image(systemName: star < game.rating ? "star.fill" : "star")
-                                .foregroundColor(.yellow)
-                        }
+                    Text(game.developer)
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    
+                    HStack(spacing: 12) {
+                        CustomCapsule(text: game.platform.rawValue, color: .blue)
                     }
                 }
-                Text(game.review)
-                    .font(.subheadline)
-                    .padding(.vertical)
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Label("Description", systemImage: "text.alignleft")
+                        .font(.headline)
+                        .foregroundColor(.blue)
+                    
+                    Text(game.description)
+                        .font(.body)
+                        .lineSpacing(4)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(15)
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Label("My Review", systemImage: "quote.bubble.fill")
+                        .font(.headline)
+                        .foregroundColor(.orange)
+                    
+                    Text(game.review.isEmpty ? "No review yet." : game.review)
+                        .font(.subheadline)
+                        .italic()
+                    
+                    HStack {
+                        Text("Rating:")
+                            .font(.subheadline).bold()
+                        StarRatingView(rating: .constant(game.rating))
+                    }
+                    .padding(.top, 5)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.orange.opacity(0.05))
+                .cornerRadius(15)
+                .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.orange.opacity(0.2), lineWidth: 1))
+                
+                Spacer(minLength: 30)
             }
-            .padding(20)
+            .padding(.horizontal)
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: { showEditSheet.toggle() }) {
                     Image(systemName: "pencil")
+                        .font(.title2)
                 }
             }
         }
